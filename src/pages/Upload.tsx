@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { useApp } from "../context/AppContext";
+import StepNavigation from "../components/StepNavigation";
 import Papa from "papaparse";
 
 export default function Upload() {
@@ -12,7 +13,7 @@ export default function Upload() {
     setCsvPreview(null);
     if (file) {
       Papa.parse(file, {
-        complete: (result) => {
+        complete: (result: any) => {
           // Limit preview to first 10 rows
           const data = (result.data as string[][]).slice(0, 10);
           setCsvPreview(data);
@@ -66,6 +67,7 @@ export default function Upload() {
           </div>
         </div>
       )}
+      <StepNavigation next={{ to: "/plan" }} />
     </div>
   );
 }

@@ -1,3 +1,5 @@
+import StepNavigation from "../components/StepNavigation";
+
 export default function Report() {
   return (
     <div className="rounded-2xl shadow-lg bg-white p-6 max-w-xl mx-auto">
@@ -5,6 +7,7 @@ export default function Report() {
       <div className="text-gray-700">
         Your report will appear here after you’ve completed your analysis.
       </div>
+      <StepNavigation prev={{ to: "/chat" }} />
     </div>
   );
 }

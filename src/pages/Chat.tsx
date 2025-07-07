@@ -1,4 +1,5 @@
 import { useState } from "react";
+import StepNavigation from "../components/StepNavigation";
 
 export default function Chat() {
   const [messages, setMessages] = useState<{role: string, text: string}[]>([
@@ -43,6 +44,7 @@ export default function Chat() {
           Send
         </button>
       </div>
+      <StepNavigation prev={{ to: "/plan" }} next={{ to: "/report" }} />
     </div>
   );
 }

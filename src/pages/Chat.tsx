@@ -1,0 +1,48 @@
+import { useState } from "react";
+
+export default function Chat() {
+  const [messages, setMessages] = useState<{role: string, text: string}[]>([
+    { role: "assistant", text: "Hi! How can I help you with your analysis?" }
+  ]);
+  const [input, setInput] = useState("");
+
+  function sendMessage() {
+    if (input.trim()) {
+      setMessages(m => [...m, { role: "user", text: input }]);
+      setInput("");
+    }
+  }
+
+  return (
+    <div className="rounded-2xl shadow-lg bg-white p-6 max-w-xl mx-auto flex flex-col h-[60vh]">
+      <h2 className="text-xl font-bold mb-4">Assistant Chat</h2>
+      <div className="flex-1 overflow-y-auto space-y-2 mb-4">
+        {messages.map((msg, i) => (
+          <div
+            key={i}
+            className={`p-2 rounded ${msg.role === "user" ? "bg-blue-100 text-right ml-auto" : "bg-gray-100"}`}
+          >
+            <span className="block text-xs font-semibold mb-1">{msg.role}</span>
+            <span>{msg.text}</span>
+          </div>
+        ))}
+      </div>
+      <div className="flex gap-2">
+        <input
+          type="text"
+          className="flex-1 rounded border p-2"
+          placeholder="Type your message..."
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          onKeyDown={e => e.key === "Enter" && sendMessage()}
+        />
+        <button
+          onClick={sendMessage}
+          className="rounded px-4 bg-blue-600 text-white font-semibold"
+        >
+          Send
+        </button>
+      </div>
+    </div>
+  );
+}

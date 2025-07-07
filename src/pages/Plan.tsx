@@ -1,4 +1,5 @@
 import { useApp } from "../context/AppContext";
+import StepNavigation from "../components/StepNavigation";
 
 export default function Plan() {
   const { uploadedFile } = useApp();
@@ -20,6 +21,7 @@ export default function Plan() {
         <div className="mb-4 text-gray-400">No dataset uploaded yet.</div>
       )}
       {/* Your plan content here */}
+      <StepNavigation prev={{ to: "/upload" }} next={{ to: "/chat" }} />
     </div>
   );
 }

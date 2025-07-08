@@ -41,7 +41,7 @@ export default tseslint.config([
 
 ## Environment variables
 
-Set the following variables in a `.env` file so the application can talk to the OpenAI API:
+Copy `.env.example` to `.env` and fill in your OpenAI credentials so the application can talk to the API:
 
 ```bash
 VITE_OPENAI_API_KEY=your-api-key

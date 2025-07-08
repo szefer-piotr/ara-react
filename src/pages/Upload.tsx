@@ -14,8 +14,7 @@ export default function Upload() {
     if (file) {
       Papa.parse(file, {
         complete: (result: any) => {
-          // Limit preview to first 10 rows
-          const data = (result.data as string[][]).slice(0, 10);
+          const data = result.data as string[][];
           setCsvPreview(data);
         },
         error: () => setCsvPreview(null),
@@ -44,8 +43,8 @@ export default function Upload() {
       {/* CSV Preview */}
       {csvPreview && csvPreview.length > 0 && (
         <div className="mt-6">
-          <div className="mb-2 text-gray-700 font-semibold">Preview (first {csvPreview.length} rows):</div>
-          <div className="overflow-auto max-w-full">
+          <div className="mb-2 text-gray-700 font-semibold">Preview (scroll to see all rows):</div>
+          <div className="overflow-auto max-w-full max-h-96 overflow-y-auto">
             <table className="min-w-full border border-gray-200 rounded shadow text-xs">
               <thead>
                 <tr>

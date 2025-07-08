@@ -1,16 +1,31 @@
 import { useState } from "react";
 import StepNavigation from "../components/StepNavigation";
+import { useApp } from "../context/AppContext";
+import { summarizeData } from "../utils/openai";
 
 export default function Chat() {
-  const [messages, setMessages] = useState<{role: string, text: string}[]>([
-    { role: "assistant", text: "Hi! How can I help you with your analysis?" }
+  const { csvPreview } = useApp();
+  const [messages, setMessages] = useState<{ role: string; text: string }[]>([
+    { role: "assistant", text: "Hi! How can I help you with your analysis?" },
   ]);
   const [input, setInput] = useState("");
 
-  function sendMessage() {
-    if (input.trim()) {
-      setMessages(m => [...m, { role: "user", text: input }]);
-      setInput("");
+  async function sendMessage() {
+    if (!input.trim()) return;
+    const userMsg = input;
+    setMessages(m => [...m, { role: "user", text: userMsg }]);
+    setInput("");
+
+    if (csvPreview) {
+      try {
+        const summary = await summarizeData(csvPreview);
+        setMessages(m => [...m, { role: "assistant", text: summary }]);
+      } catch {
+        setMessages(m => [
+          ...m,
+          { role: "assistant", text: "Failed to summarise data." },
+        ]);
+      }
     }
   }
 

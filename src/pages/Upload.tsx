@@ -13,8 +13,8 @@ export default function Upload() {
     setCsvPreview(null);
     if (file) {
       Papa.parse(file, {
-        complete: (result: any) => {
-          const data = result.data as string[][];
+        complete: (result: unknown) => {
+          const data = (result as { data: string[][] }).data;
           setCsvPreview(data);
         },
         error: () => setCsvPreview(null),

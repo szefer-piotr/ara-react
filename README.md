@@ -39,6 +39,21 @@ export default tseslint.config([
 ])
 ```
 
+## Environment variables
+
+Set the following variables in a `.env` file so the application can talk to the OpenAI API:
+
+```bash
+VITE_OPENAI_API_KEY=your-api-key
+VITE_OPENAI_ENDPOINT=https://api.openai.com/v1/chat/completions
+```
+
+## Usage
+
+Upload a CSV on the **Upload** page and proceed to **Chat**. Sending a message will
+request a short summary of the uploaded data from the OpenAI API and display it
+in the assistant chat.
+
 You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
 ```js

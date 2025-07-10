@@ -2,10 +2,11 @@ import { useRef } from "react";
 import { useApp } from "../context/AppContext";
 import StepNavigation from "../components/StepNavigation";
 import Papa from "papaparse";
+import { summarizeData } from "../utils/openai";
 
 export default function Upload() {
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const { uploadedFile, setUploadedFile, csvPreview, setCsvPreview } = useApp();
+  const { uploadedFile, setUploadedFile, csvPreview, setCsvPreview, setSummary } = useApp();
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0] ?? null;
@@ -13,11 +14,20 @@ export default function Upload() {
     setCsvPreview(null);
     if (file) {
       Papa.parse(file, {
-        complete: (result: unknown) => {
+        complete: async (result: unknown) => {
           const data = (result as { data: string[][] }).data;
           setCsvPreview(data);
+          try {
+            const summary = await summarizeData(data);
+            setSummary(summary);
+          } catch {
+            setSummary(null);
+          }
         },
-        error: () => setCsvPreview(null),
+        error: () => {
+          setCsvPreview(null);
+          setSummary(null);
+        },
       });
     }
   }

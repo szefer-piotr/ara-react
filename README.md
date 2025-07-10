@@ -50,9 +50,9 @@ VITE_OPENAI_ENDPOINT=https://api.openai.com/v1/chat/completions
 
 ## Usage
 
-Upload a CSV on the **Upload** page and proceed to **Chat**. Sending a message will
-request a short summary of the uploaded data from the OpenAI API and display it
-in the assistant chat.
+Upload a CSV on the **Upload** page and the app will automatically request a
+short summary of the data from the OpenAI API. Open the **Chat** page to view the
+summary and continue the conversation with the assistant.
 
 You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 

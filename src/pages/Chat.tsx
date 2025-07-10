@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import StepNavigation from "../components/StepNavigation";
 import { useApp } from "../context/AppContext";
-import { summarizeData } from "../utils/openai";
+
 
 export default function Chat() {
-  const { csvPreview } = useApp();
+  const { summary } = useApp();
   const [messages, setMessages] = useState<{ role: string; text: string }[]>([
     { role: "assistant", text: "Hi! How can I help you with your analysis?" },
   ]);
@@ -15,19 +15,14 @@ export default function Chat() {
     const userMsg = input;
     setMessages(m => [...m, { role: "user", text: userMsg }]);
     setInput("");
-
-    if (csvPreview) {
-      try {
-        const summary = await summarizeData(csvPreview);
-        setMessages(m => [...m, { role: "assistant", text: summary }]);
-      } catch {
-        setMessages(m => [
-          ...m,
-          { role: "assistant", text: "Failed to summarise data." },
-        ]);
-      }
-    }
   }
+
+  useEffect(() => {
+    if (!summary) return;
+    setMessages(m => {
+      return m.some(msg => msg.text === summary) ? m : [...m, { role: "assistant", text: summary }];
+    });
+  }, [summary]);
 
   return (
     <div className="rounded-2xl shadow-lg bg-white p-6 max-w-xl mx-auto flex flex-col h-[60vh]">

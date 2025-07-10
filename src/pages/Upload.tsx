@@ -8,21 +8,25 @@ export default function Upload() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { uploadedFile, setUploadedFile, csvPreview, setCsvPreview, setSummary } = useApp();
 
+  async function generateSummary(data: string[][]) {
+    try {
+      const summary = await summarizeData(data);
+      setSummary(summary);
+    } catch {
+      setSummary(null);
+    }
+  }
+
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0] ?? null;
     setUploadedFile(file);
     setCsvPreview(null);
     if (file) {
       Papa.parse(file, {
-        complete: async (result: unknown) => {
+        complete: (result: unknown) => {
           const data = (result as { data: string[][] }).data;
           setCsvPreview(data);
-          try {
-            const summary = await summarizeData(data);
-            setSummary(summary);
-          } catch {
-            setSummary(null);
-          }
+          generateSummary(data);
         },
         error: () => {
           setCsvPreview(null);

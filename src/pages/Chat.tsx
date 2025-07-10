@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import StepNavigation from "../components/StepNavigation";
+import Spinner from "../components/Spinner";
 import { useApp } from "../context/AppContext";
 import { summarizeData } from "../utils/openai";
 
@@ -67,10 +68,10 @@ export default function Chat() {
         />
         <button
           onClick={sendMessage}
-          className="rounded px-4 bg-blue-600 text-white font-semibold disabled:opacity-50"
+          className="rounded px-4 bg-blue-600 text-white font-semibold disabled:opacity-50 flex items-center justify-center"
           disabled={loading}
         >
-          {loading ? "Summarizing…" : "Send"}
+          {loading ? <Spinner className="text-white" /> : "Send"}
         </button>
       </div>
       <StepNavigation prev={{ to: "/plan" }} next={{ to: "/report" }} />

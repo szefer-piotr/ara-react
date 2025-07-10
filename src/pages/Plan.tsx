@@ -2,7 +2,7 @@ import { useApp } from "../context/AppContext";
 import StepNavigation from "../components/StepNavigation";
 
 export default function Plan() {
-  const { uploadedFile } = useApp();
+  const { uploadedFile, summary } = useApp();
 
   return (
     
@@ -19,6 +19,11 @@ export default function Plan() {
         </div>
       ) : (
         <div className="mb-4 text-gray-400">No dataset uploaded yet.</div>
+      )}
+      {summary && (
+        <div className="mb-4 p-3 rounded bg-yellow-50 text-yellow-800 shadow-inner">
+          <strong>Data summary:</strong> {summary}
+        </div>
       )}
       {/* Your plan content here */}
       <StepNavigation prev={{ to: "/upload" }} next={{ to: "/chat" }} />

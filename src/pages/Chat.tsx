@@ -1,20 +1,38 @@
 import { useState, useEffect } from "react";
 import StepNavigation from "../components/StepNavigation";
 import { useApp } from "../context/AppContext";
+import { summarizeData } from "../utils/openai";
 
 
 export default function Chat() {
-  const { summary } = useApp();
+  const { csvPreview, summary, setSummary } = useApp();
   const [messages, setMessages] = useState<{ role: string; text: string }[]>([
     { role: "assistant", text: "Hi! How can I help you with your analysis?" },
   ]);
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function sendMessage() {
     if (!input.trim()) return;
     const userMsg = input;
     setMessages(m => [...m, { role: "user", text: userMsg }]);
     setInput("");
+
+    if (csvPreview && !summary) {
+      setLoading(true);
+      try {
+        const sum = await summarizeData(csvPreview);
+        setSummary(sum);
+        setMessages(m => [...m, { role: "assistant", text: sum }]);
+      } catch {
+        setMessages(m => [
+          ...m,
+          { role: "assistant", text: "Failed to summarise data." },
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    }
   }
 
   useEffect(() => {
@@ -49,9 +67,10 @@ export default function Chat() {
         />
         <button
           onClick={sendMessage}
-          className="rounded px-4 bg-blue-600 text-white font-semibold"
+          className="rounded px-4 bg-blue-600 text-white font-semibold disabled:opacity-50"
+          disabled={loading}
         >
-          Send
+          {loading ? "Summarizing…" : "Send"}
         </button>
       </div>
       <StepNavigation prev={{ to: "/plan" }} next={{ to: "/report" }} />

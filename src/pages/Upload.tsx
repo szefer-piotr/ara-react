@@ -1,19 +1,24 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useApp } from "../context/AppContext";
 import StepNavigation from "../components/StepNavigation";
+import Spinner from "../components/Spinner";
 import Papa from "papaparse";
 import { summarizeData } from "../utils/openai";
 
 export default function Upload() {
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const [loading, setLoading] = useState(false);
   const { uploadedFile, setUploadedFile, csvPreview, setCsvPreview, setSummary } = useApp();
 
   async function generateSummary(data: string[][]) {
+    setLoading(true);
     try {
       const summary = await summarizeData(data);
       setSummary(summary);
     } catch {
       setSummary(null);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -78,6 +83,11 @@ export default function Upload() {
               </tbody>
             </table>
           </div>
+        </div>
+      )}
+      {loading && (
+        <div className="flex justify-center my-4">
+          <Spinner />
         </div>
       )}
       <StepNavigation next={{ to: "/plan" }} />
